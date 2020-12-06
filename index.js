@@ -1,6 +1,6 @@
 'use strict';
 
-const day5 = require('./src/day5');
+const day6 = require('./src/day6');
 
-day5.solve1();
-day5.solve2();
+day6.solve1();
+day6.solve2();
