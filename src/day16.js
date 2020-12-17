@@ -1,5 +1,4 @@
 const fs = require('fs');
-const { exit } = require('process');
 
 const dataPath = 'data/2020_day_16_input.txt';
 
@@ -57,15 +56,6 @@ class Ticket {
 
   invalidValues(rules) {
     return this.values.filter(v => { return !valueIsValid(v, rules); });
-  }
-
-  validPos(rule, excludedPos) {
-    let pos = [];
-    this.values.forEach((v, index) => {
-      console.log(rule.isInRange(v));
-      if (!excludedPos.includes(index) && rule.isInRange(v)) pos.push(index);
-    });
-    return pos;
   }
 }
 
