@@ -13,7 +13,19 @@ function buildRe(rules, index) {
   const r = rules.get(index);
   if (r === '"a"') return 'a';
   else if (r === '"b"') return 'b';
-  else {
+  else if (index === 8) return '(' + buildRe(rules, 42) + ')+';
+  else if (index === 11) {
+    // can we do the following with regular expression ?
+    // pattern1 repeated n times followed by pattern2 also repeated n times
+    // hard wiring 10 repetitions
+    const re42 = buildRe(rules, 42);
+    const re31 = buildRe(rules, 31);
+    let a = [re42 + re31];
+    for (var i = 1; i < 10; i++) {
+      a.push(re42 + a[i-1] + re31);
+    }
+    return '(' + a.join('|') + ')';
+  } else {
     const splitOr = r.split(' | ');
     return '(' + splitOr.map(s => buildReFromSubRules(rules, s)).join('|') + ')'
   }
