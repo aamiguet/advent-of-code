@@ -49,6 +49,46 @@ function winnerScore(game) {
   return game.deck1.length > 0 ? score(game.deck1) : score(game.deck2);
 }
 
+function updateGame(game, card1, card2, winner) {
+  if (winner === 'p1') {
+    game.deck1.push(card1);
+    game.deck1.push(card2);
+  } else {
+    game.deck2.push(card2);
+    game.deck2.push(card1);
+  }
+}
+
+function serializeGame(game) {
+  return 'deck1-' + game.deck1.join('-') + '-deck2-' + game.deck2.join('-');
+}
+
+function recursiveCombat(game, history) {
+  const s = serializeGame(game);
+  if (history.includes(s)) {
+    return 'p1';
+  } else {
+    history.push(s);
+  }
+  const card1 = game.deck1.shift(0);
+  const card2 = game.deck2.shift(0);
+  let winner;
+  if (card1 <= game.deck1.length && card2 <= game.deck2.length) {
+    const subGame = {
+      deck1: game.deck1.slice(0, card1),
+      deck2: game.deck2.slice(0, card2)
+    }
+    let h = [];
+    winner = recursiveCombat(subGame, h);
+  } else {
+    winner = card1 > card2 ? 'p1' : 'p2';
+  }
+  updateGame(game, card1, card2, winner);
+  if (game.deck1.length === 0) return 'p2';
+  if (game.deck2.length === 0) return 'p1';
+  return recursiveCombat(game, history);
+}
+
 module.exports = {
   solve1: () => {
     const game = extractGame();
@@ -59,5 +99,9 @@ module.exports = {
   },
 
   solve2: () => {
+    const game = extractGame();
+    let h = [];
+    const winner = recursiveCombat(game, h);
+    console.log(`The winner is ${winner} with the score ${winnerScore(game)}`);
   }
 }
