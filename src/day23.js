@@ -1,4 +1,4 @@
-
+'use strict';
 
 const TestCups = [3, 8, 9, 1, 2, 5, 4, 6, 7];
 const InputCups = [1, 2, 3, 4, 8, 7, 5, 9, 6];
