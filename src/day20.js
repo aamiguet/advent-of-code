@@ -14,6 +14,7 @@ const SeaMonster = [
   '#    ##    ##    ###',
   ' #  #  #  #  #  #   '
 ];
+const SeaMonsterPattern = SeaMonster.map(l => { const rep = l.replace(/\s/g, '.'); return new RegExp(rep); });
 const SeaMonsterLength = SeaMonster[0].length;
 const SeaMonsterCount = sharpCount(SeaMonster);
 
@@ -249,13 +250,12 @@ function buildImage(tiles) {
 }
 
 function countMonster(imageSegment) {
-  const SeaMonsterPattern = SeaMonster.map(l => { const rep = l.replace(/\s/g, '.'); return new RegExp(rep, 'g'); });
   const potentialSeaMonster = SeaMonsterPattern[1].exec(imageSegment[1]);
   if (potentialSeaMonster) {
     const endIndex = potentialSeaMonster.index + SeaMonsterLength;
     const top = imageSegment[0].substring(potentialSeaMonster.index, endIndex);
     const bottom = imageSegment[2].substring(potentialSeaMonster.index, endIndex);
-    if (top.match(SeaMonsterPattern[0]) && bottom.match(SeaMonsterPattern[2])) {
+    if (SeaMonsterPattern[0].test(top) && SeaMonsterPattern[2].test(bottom)) {
       return 1 + countMonster(imageSegment.map(is => is.slice(endIndex)));
     } else {
       return countMonster(imageSegment.map(is => is.slice(potentialSeaMonster.index + 2)));
